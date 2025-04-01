@@ -114,6 +114,18 @@ export default function ReviewsPage() {
   return (
     <div className="py-12">
       <div className="container">
+        <div className="mb-12 rounded-lg border bg-muted/30 p-8 text-center">
+          <h2 className="text-2xl font-bold">شاركنا رأيك</h2>
+          <p className="mt-4 text-muted-foreground">
+            نحن نقدر آراء عملائنا ونسعى دائماً لتحسين منتجاتنا وخدماتنا. شاركنا
+            تجربتك مع عطور عمران.
+          </p>
+          <div className="mt-6">
+            <Button size="lg" onClick={() => setIsModalOpen(true)}>
+              أرسل رأيك
+            </Button>
+          </div>
+        </div>
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="text-3xl font-bold md:text-4xl">آراء العملاء</h1>
           <p className="mt-4 text-lg text-muted-foreground">
@@ -155,19 +167,6 @@ export default function ReviewsPage() {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="mt-12 rounded-lg border bg-muted/30 p-8 text-center">
-          <h2 className="text-2xl font-bold">شاركنا رأيك</h2>
-          <p className="mt-4 text-muted-foreground">
-            نحن نقدر آراء عملائنا ونسعى دائماً لتحسين منتجاتنا وخدماتنا. شاركنا
-            تجربتك مع عطور عمران.
-          </p>
-          <div className="mt-6">
-            <Button size="lg" onClick={() => setIsModalOpen(true)}>
-              أرسل رأيك
-            </Button>
-          </div>
         </div>
       </div>
 

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useTheme } from "next-themes";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,6 +15,7 @@ export default function Navbar() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  const { theme } = useTheme();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -23,7 +25,7 @@ export default function Navbar() {
             <Avatar className="h-14 w-14">
               <AvatarImage
                 className="aspect-square h-16 w-20"
-                src="/logo2.png?height=1080&width=1920"
+                src={theme === "dark" ? "/logo2.png" : "/logo.png"}
                 alt="عطور عمران"
               />
               <AvatarFallback>عطور عمران</AvatarFallback>
@@ -85,14 +87,14 @@ export default function Navbar() {
       {/* Mobile Navigation */}
       <div
         className={cn(
-          "fixed inset-0 top-16 z-50 bg-background md:hidden",
+          "fixed w-full  top-16 left-0 rounded-md z-50 bg-background md:hidden",
           isMenuOpen ? "flex flex-col" : "hidden"
         )}
       >
-        <nav className="flex flex-col items-center gap-6 p-6">
+        <nav className="flex  flex-col items-center gap-6 p-6">
           <Link
             href="/"
-            className="text-xl font-medium transition-colors hover:text-primary"
+            className="text-xl  font-medium transition-colors hover:text-primary"
             onClick={() => setIsMenuOpen(false)}
           >
             الرئيسية

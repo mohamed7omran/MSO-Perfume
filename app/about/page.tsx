@@ -1,8 +1,10 @@
 "use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 
 export default function AboutPage() {
+  const { theme } = useTheme();
   return (
     <div className="py-12">
       <div className="container">
@@ -28,7 +30,7 @@ export default function AboutPage() {
             transition={{ duration: 1 }}
           >
             <Image
-              src="/logo2.png?height=600&width=600&text=صورة العلامة التجارية"
+              src={theme === "dark" ? "/logo2.png" : "/logo.png"}
               alt="عطور عمران"
               width={600}
               height={600}
