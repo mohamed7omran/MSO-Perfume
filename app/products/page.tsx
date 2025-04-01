@@ -9,6 +9,13 @@ import { Badge } from "@/components/ui/badge";
 import { getProducts } from "@/lib/products";
 import type { Product } from "@/types/product";
 
+const imgs = [
+  "/perfume1.png",
+  "/perfume2.png",
+  "/perfume3.png",
+  "/perfume4.png",
+  "/perfume5.png",
+];
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,7 +82,7 @@ export default function ProductsPage() {
         </div>
 
         <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
+          {products.map((product, index) => (
             <div
               key={product.id}
               className="group relative overflow-hidden rounded-lg border bg-background p-6 transition-all hover:shadow-lg dark:hover:shadow-primary/10"
@@ -97,7 +104,8 @@ export default function ProductsPage() {
 
               <div className="aspect-square overflow-hidden rounded-md bg-muted">
                 <Image
-                  src={product.image || "/placeholder.svg"}
+                  // src={product.image || "/placeholder.svg"}
+                  src={imgs[index] || "/placeholder.svg"}
                   alt={product.name}
                   width={400}
                   height={400}

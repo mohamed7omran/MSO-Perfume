@@ -10,7 +10,13 @@ import { Badge } from "@/components/ui/badge";
 import { getProducts } from "@/lib/products";
 import type { Product } from "@/types/product";
 import { motion } from "framer-motion";
-
+const imgs = [
+  "/perfume1.png",
+  "/perfume2.png",
+  "/perfume3.png",
+  "/perfume4.png",
+  "/perfume5.png",
+];
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -150,7 +156,7 @@ export default function Home() {
             </p>
           ) : (
             <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {featuredProducts.map((product) => (
+              {featuredProducts.map((product, index) => (
                 <div
                   key={product.id}
                   className="group relative overflow-hidden rounded-lg border bg-background p-6 transition-all hover:shadow-lg"
@@ -172,7 +178,8 @@ export default function Home() {
 
                   <div className="aspect-square overflow-hidden rounded-md bg-muted">
                     <Image
-                      src={product.image || "/placeholder.svg"}
+                      // src={product.image || "/placeholder.svg"}
+                      src={imgs[index] || "/placeholder.svg"}
                       alt={product.name}
                       width={400}
                       height={400}
