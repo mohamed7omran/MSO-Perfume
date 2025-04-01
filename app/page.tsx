@@ -1,263 +1,253 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Star } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { Instagram, Facebook, MessageSquare, Tag, Loader2 } from "lucide-react";
+import ReviewsCarousel from "@/components/reviews-carousel";
+import { Badge } from "@/components/ui/badge";
+import { getProducts } from "@/lib/products";
+import type { Product } from "@/types/product";
 
 export default function Home() {
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        setLoading(true);
+        const allProducts = await getProducts();
+        // Get first 3 products for featured section
+        setFeaturedProducts(allProducts.slice(0, 3));
+      } catch (err) {
+        setError("حدث خطأ أثناء تحميل المنتجات");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProducts();
+  }, []);
+
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[80vh] w-full">
-        <div className="absolute inset-0 bg-black/40 z-10" />
+      <section className="relative h-[80vh] w-full overflow-hidden">
+        <div className="absolute inset-0 bg-black/60 dark:bg-black/70 z-10" />
         <Image
-          src="/3.jpg"
-          alt="Luxury Perfume Collection"
+          src="/logo.png?height=1080&width=1920"
+          alt="عطور العمران"
           fill
-          className="object-cover"
           priority
+          className="object-cover"
         />
-        <div className="relative z-20 container mx-auto h-full flex flex-col items-center justify-center text-center px-4">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            Discover Your Signature Scent
+        <div className="container relative z-20 flex h-full flex-col items-center justify-center text-center">
+          <h1 className="text-4xl font-bold text-white md:text-6xl">
+            عطور العمران
           </h1>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl">
-            Exquisite fragrances crafted with the finest ingredients for the
-            discerning individual
+          <p className="mt-4 max-w-2xl text-xl text-white md:text-2xl">
+            عطور فاخرة بلمسة عربية أصيلة
           </p>
-          <Button asChild size="lg" className="text-lg px-8">
-            <Link href="/shop">Shop Now</Link>
-          </Button>
+          <div className="mt-8">
+            <Button asChild size="lg" className="text-lg">
+              <Link href="/contact">تواصل معنا</Link>
+            </Button>
+          </div>
         </div>
       </section>
-      <div className="bg-background text-foreground p-6">
-        هذا عنصر يختبر الألوان!
-      </div>
-      {/* Featured Products */}
-      <section className="py-16 container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          Featured Collections
-        </h2>
-        <Carousel className="w-full max-w-5xl mx-auto">
-          <CarouselContent>
-            {featuredPerfumes.map((perfume) => (
-              <CarouselItem
-                key={perfume.id}
-                className="md:basis-1/2 lg:basis-1/3"
-              >
-                <Card className="border-none shadow-lg">
-                  <CardContent className="p-0">
-                    <div className="relative aspect-square overflow-hidden rounded-t-lg">
-                      <Image
-                        src={perfume.image || "/placeholder.png"}
-                        alt={perfume.name}
-                        fill
-                        className="object-cover transition-transform hover:scale-105"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-medium text-lg">{perfume.name}</h3>
-                      <div className="flex items-center mt-1 mb-2">
-                        {Array(5)
-                          .fill(0)
-                          .map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < perfume.rating
-                                  ? "fill-primary text-primary"
-                                  : "fill-muted text-muted-foreground"
-                              }`}
-                            />
-                          ))}
-                      </div>
-                      <div className="flex justify-between items-center mt-2">
-                        <span className="font-bold">${perfume.price}</span>
-                        <Button variant="outline" size="sm" asChild>
-                          <Link href={`/shop/${perfume.id}`}>View</Link>
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="left-0 -translate-x-1/2" />
-          <CarouselNext className="right-0 translate-x-1/2" />
-        </Carousel>
-      </section>
 
-      {/* Why MSO Section */}
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Why MSO Perfume?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-background p-8 rounded-lg shadow-md text-center">
-              <h3 className="text-xl font-semibold mb-4">
-                Premium Ingredients
-              </h3>
-              <p>
-                Our fragrances are crafted using only the finest ingredients
-                sourced from around the world.
-              </p>
-            </div>
-            <div className="bg-background p-8 rounded-lg shadow-md text-center">
-              <h3 className="text-xl font-semibold mb-4">Master Perfumers</h3>
-              <p>
-                Each scent is created by master perfumers with decades of
-                experience in the art of fragrance creation.
-              </p>
-            </div>
-            <div className="bg-background p-8 rounded-lg shadow-md text-center">
-              <h3 className="text-xl font-semibold mb-4">
-                Long-Lasting Scents
-              </h3>
-              <p>
-                Our unique formulation ensures that your fragrance lasts
-                throughout the day and into the night.
-              </p>
+      {/* Introduction Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-3xl font-bold md:text-4xl">من نحن؟</h2>
+            <p className="mt-6 text-lg text-muted-foreground">
+              نحن في عطور العمران نقدم لكم تشكيلة فريدة من العطور الفاخرة
+              المصنوعة بعناية فائقة من أجود المكونات الطبيعية. تجمع عطورنا بين
+              الأصالة العربية والحداثة العالمية لتمنحكم تجربة عطرية لا تُنسى.
+            </p>
+            <div className="mt-8">
+              <Button asChild variant="outline" size="lg">
+                <Link href="/about">اقرأ المزيد عنا</Link>
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16 container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          What Our Customers Say
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <Card key={index} className="shadow-md">
-              <CardContent className="pt-6">
-                <div className="flex items-center mb-4">
-                  {Array(5)
-                    .fill(0)
-                    .map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${
-                          i < testimonial.rating
-                            ? "fill-primary text-primary"
-                            : "fill-muted text-muted-foreground"
-                        }`}
-                      />
-                    ))}
-                </div>
-                <p className="italic mb-4">{`"${testimonial.comment}"`}</p>
-                <div className="flex items-center">
-                  <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
+      {/* Featured Products */}
+      <section className="py-16">
+        <div className="container">
+          <h2 className="text-3xl font-bold text-center md:text-4xl">
+            منتجاتنا المميزة
+          </h2>
+
+          {loading ? (
+            <div className="mt-12 flex justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="mr-2">جاري تحميل المنتجات...</span>
+            </div>
+          ) : error ? (
+            <div className="mt-8 rounded-lg border border-destructive bg-destructive/10 p-4 text-center text-destructive">
+              {error}
+            </div>
+          ) : featuredProducts.length === 0 ? (
+            <p className="mt-8 text-center text-muted-foreground">
+              لا توجد منتجات متاحة حالياً
+            </p>
+          ) : (
+            <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {featuredProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="group relative overflow-hidden rounded-lg border bg-background p-6 transition-all hover:shadow-lg"
+                >
+                  {product.isNew && (
+                    <Badge className="absolute right-4 top-4 z-10">جديد</Badge>
+                  )}
+
+                  {product.price > product.discountedPrice && (
+                    <div className="absolute left-4 top-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-destructive font-bold text-destructive-foreground">
+                      {Math.round(
+                        ((product.price - product.discountedPrice) /
+                          product.price) *
+                          100
+                      )}
+                      %
+                    </div>
+                  )}
+
+                  <div className="aspect-square overflow-hidden rounded-md bg-muted">
                     <Image
-                      src={testimonial.avatar || "/default-avatar.webp"}
-                      alt={testimonial.name}
-                      fill
-                      className="object-cover"
+                      src={product.image || "/placeholder.svg"}
+                      alt={product.name}
+                      width={400}
+                      height={400}
+                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
                     />
                   </div>
-                  <div>
-                    <p className="font-medium">{testimonial.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {testimonial.location}
+                  <div className="mt-6 text-center">
+                    <h3 className="text-xl font-bold">{product.name}</h3>
+                    <p className="mt-2 text-muted-foreground">
+                      {product.description}
                     </p>
+
+                    <div className="mt-3 flex justify-center">
+                      {product.price > product.discountedPrice ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm line-through text-muted-foreground">
+                            {product.price}جنيه
+                          </span>
+                          <span className="text-lg font-bold text-destructive">
+                            {product.discountedPrice}جنيه
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-lg font-bold">
+                          {product.price}جنيه
+                        </span>
+                      )}
+                    </div>
+
+                    {product.offer && (
+                      <div className="mt-3 flex items-center justify-center gap-2 rounded-md bg-primary/10 p-2 text-sm">
+                        <Tag className="h-4 w-4 text-primary" />
+                        <span>{product.offer}</span>
+                      </div>
+                    )}
+
+                    <Button asChild className="mt-4 w-full">
+                      <Link
+                        href="https://wa.me/+201030576522"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <MessageSquare className="ml-2 h-4 w-4" />
+                        تواصل للطلب
+                      </Link>
+                    </Button>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+              ))}
+            </div>
+          )}
+
+          <div className="mt-12 text-center">
+            <Button asChild variant="outline" size="lg">
+              <Link href="/products">عرض جميع المنتجات</Link>
+            </Button>
+          </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">
-            Ready to Find Your Perfect Scent?
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Explore our collection of premium fragrances and discover the one
-            that speaks to you.
-          </p>
-          <Button
-            asChild
-            size="lg"
-            variant="secondary"
-            className="text-lg px-8"
-          >
-            <Link href="/shop" className="flex items-center">
-              Shop Now <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
+      {/* Reviews Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-3xl font-bold md:text-4xl">آراء العملاء</h2>
+            <p className="mt-4 text-lg text-muted-foreground">
+              اطلع على تجارب وآراء عملائنا الكرام مع عطور العمران
+            </p>
+          </div>
+          <div className="mt-12">
+            <ReviewsCarousel />
+          </div>
+          <div className="mt-8 text-center">
+            <Button asChild variant="outline" size="lg">
+              <Link href="/reviews">عرض جميع التقييمات</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact CTA */}
+      <section className="bg-primary py-16 text-primary-foreground">
+        <div className="container">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-3xl font-bold md:text-4xl">تواصل معنا</h2>
+            <p className="mt-6 text-lg">
+              نحن سعداء بالإجابة على استفساراتكم وتلبية طلباتكم. تواصلوا معنا
+              عبر وسائل التواصل الاجتماعي أو من خلال نموذج الاتصال.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Button asChild variant="secondary" size="lg">
+                <Link
+                  href="https://wa.me/+201030576522"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageSquare className="ml-2 h-5 w-5" />
+                  واتساب
+                </Link>
+              </Button>
+              <Button asChild variant="secondary" size="lg">
+                <Link
+                  href="https://instagram.com/elomranperfume"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Instagram className="ml-2 h-5 w-5" />
+                  انستغرام
+                </Link>
+              </Button>
+              <Button asChild variant="secondary" size="lg">
+                <Link
+                  href="https://facebook.com/elomranperfume"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Facebook className="ml-2 h-5 w-5" />
+                  فيسبوك
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
     </div>
   );
 }
-// Sample data
-const featuredPerfumes = [
-  {
-    id: "1",
-    name: "Midnight Orchid",
-    price: 129.99,
-    rating: 5,
-    image: "/2.jpg?height=500&width=500",
-  },
-  {
-    id: "2",
-    name: "Ocean Breeze",
-    price: 99.99,
-    rating: 4,
-    image: "/1.jpg?height=500&width=500",
-  },
-  {
-    id: "3",
-    name: "Amber Elegance",
-    price: 149.99,
-    rating: 5,
-    image: "/4.jpg?height=500&width=500",
-  },
-  {
-    id: "4",
-    name: "Velvet Rose",
-    price: 119.99,
-    rating: 4,
-    image: "/6.jpg?height=500&width=500",
-  },
-];
-
-const testimonials = [
-  {
-    name: "Sarah Johnson",
-    location: "New York",
-    rating: 5,
-    comment:
-      "The Midnight Orchid fragrance is absolutely divine! I receive compliments every time I wear it.",
-    avatar: "/default-avatar.webp?height=100&width=100",
-  },
-  {
-    name: "Michael Chen",
-    location: "Los Angeles",
-    rating: 5,
-    comment:
-      "Ocean Breeze has become my signature scent. It's fresh yet sophisticated, perfect for any occasion.",
-    avatar: "/default-avatar.webp?height=100&width=100",
-  },
-  {
-    name: "Emma Rodriguez",
-    location: "Miami",
-    rating: 4,
-    comment:
-      "Amber Elegance is the perfect evening fragrance. Long-lasting and truly unique.",
-    avatar: "/default-avatar.webp?height=100&width=100",
-  },
-];
