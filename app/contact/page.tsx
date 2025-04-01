@@ -207,7 +207,7 @@ export default function ContactPage() {
             allowFullScreen={true}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            title="موقع عطور العمران"
+            title="موقع عطور عمران"
           ></iframe>
         </div> */}
       </div>

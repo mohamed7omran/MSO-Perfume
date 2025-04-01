@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,8 +19,15 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center">
-          <Link href="/" className="text-2xl text-primary font-bold">
-            عطور العمران
+          <Link href="/" className=" text-primary">
+            <Avatar className="h-14 w-14">
+              <AvatarImage
+                className="aspect-square h-16 w-20"
+                src="/logo2.png?height=1080&width=1920"
+                alt="عطور عمران"
+              />
+              <AvatarFallback>عطور عمران</AvatarFallback>
+            </Avatar>
           </Link>
         </div>
 

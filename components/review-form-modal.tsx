@@ -30,7 +30,7 @@ const products = [
   { id: 3, name: "جنتلمان أونلي" },
   { id: 4, name: "دينيم كولكشن" },
   { id: 5, name: "بنتلي مومنتوم" },
-  { id: 6, name: "عطر العمران الخاص" },
+  { id: 6, name: "عطر عمران الخاص" },
 ];
 
 type ReviewFormModalProps = {

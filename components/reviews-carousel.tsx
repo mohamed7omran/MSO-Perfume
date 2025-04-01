@@ -14,7 +14,7 @@ const featuredReviews = [
     avatar: "/avatar.png",
     rating: 5,
     review:
-      "من أفضل العطور التي جربتها، رائحة فريدة ومميزة تدوم لفترة طويلة. أنصح الجميع بتجربة عطور العمران.",
+      "من أفضل العطور التي جربتها، رائحة فريدة ومميزة تدوم لفترة طويلة. أنصح الجميع بتجربة عطور عمران.",
     product: "عطر تمبتيشن",
   },
   {
@@ -32,7 +32,7 @@ const featuredReviews = [
     avatar: "/avatar.png",
     rating: 5,
     review:
-      "تجربة شراء ممتازة والتوصيل كان سريعاً. العطر فاخر جداً ويستحق السعر. سأكرر التجربة مع عطور أخرى من العمران.",
+      "تجربة شراء ممتازة والتوصيل كان سريعاً. العطر فاخر جداً ويستحق السعر. سأكرر التجربة مع عطور أخرى من عمران.",
     product: "جنتلمان أونلي",
   },
 ];
@@ -96,7 +96,7 @@ export default function ReviewsCarousel() {
           onClick={goToPrevious}
           aria-label="السابق"
         >
-          <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
+          <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
         </Button>
       </div>
 
@@ -108,7 +108,7 @@ export default function ReviewsCarousel() {
           onClick={goToNext}
           aria-label="التالي"
         >
-          <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
+          <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
         </Button>
       </div>
 

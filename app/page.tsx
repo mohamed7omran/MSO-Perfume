@@ -9,6 +9,7 @@ import ReviewsCarousel from "@/components/reviews-carousel";
 import { Badge } from "@/components/ui/badge";
 import { getProducts } from "@/lib/products";
 import type { Product } from "@/types/product";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -36,51 +37,99 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[80vh] w-full overflow-hidden">
+      <motion.section
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="relative h-[80vh] w-full overflow-hidden"
+      >
         <div className="absolute inset-0 bg-black/60 dark:bg-black/70 z-10" />
         <Image
-          src="/logo.png?height=1080&width=1920"
-          alt="عطور العمران"
+          src="/perfume3.png?height=1080&width=1920"
+          alt="عطور عمران"
           fill
           priority
           className="object-cover"
         />
         <div className="container relative z-20 flex h-full flex-col items-center justify-center text-center">
-          <h1 className="text-4xl font-bold text-white md:text-6xl">
-            عطور العمران
-          </h1>
-          <p className="mt-4 max-w-2xl text-xl text-white md:text-2xl">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="text-4xl font-bold text-primary md:text-6xl"
+          >
+            عطور عمران
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 1 }}
+            className="mt-4 max-w-2xl text-xl text-white md:text-2xl"
+          >
             عطور فاخرة بلمسة عربية أصيلة
-          </p>
-          <div className="mt-8">
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1, duration: 0.8 }}
+            className="mt-8"
+          >
             <Button asChild size="lg" className="text-lg">
               <Link href="/contact">تواصل معنا</Link>
             </Button>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Introduction Section */}
-      <section className="py-16 bg-muted/30">
+      <motion.section
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="py-16 bg-muted/30"
+      >
         <div className="container">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl">من نحن؟</h2>
-            <p className="mt-6 text-lg text-muted-foreground">
-              نحن في عطور العمران نقدم لكم تشكيلة فريدة من العطور الفاخرة
-              المصنوعة بعناية فائقة من أجود المكونات الطبيعية. تجمع عطورنا بين
-              الأصالة العربية والحداثة العالمية لتمنحكم تجربة عطرية لا تُنسى.
-            </p>
-            <div className="mt-8">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 1 }}
+              className="text-3xl font-bold md:text-4xl"
+            >
+              من نحن؟
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 1 }}
+              className="mt-6 text-lg text-muted-foreground"
+            >
+              نحن في عطور عمران نقدم لكم تشكيلة فريدة من العطور الفاخرة المصنوعة
+              بعناية فائقة من أجود المكونات الطبيعية. تجمع عطورنا بين الأصالة
+              العربية والحداثة العالمية لتمنحكم تجربة عطرية لا تُنسى.
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.7, duration: 0.8 }}
+              className="mt-8"
+            >
               <Button asChild variant="outline" size="lg">
                 <Link href="/about">اقرأ المزيد عنا</Link>
               </Button>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Featured Products */}
-      <section className="py-16">
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 1 }}
+        className="py-16"
+      >
         <div className="container">
           <h2 className="text-3xl font-bold text-center md:text-4xl">
             منتجاتنا المميزة
@@ -182,15 +231,20 @@ export default function Home() {
             </Button>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Reviews Section */}
-      <section className="py-16 bg-muted/30">
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 1 }}
+        className="py-16 bg-muted/30"
+      >
         <div className="container">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold md:text-4xl">آراء العملاء</h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              اطلع على تجارب وآراء عملائنا الكرام مع عطور العمران
+              اطلع على تجارب وآراء عملائنا الكرام مع عطور عمران
             </p>
           </div>
           <div className="mt-12">
@@ -202,10 +256,15 @@ export default function Home() {
             </Button>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Contact CTA */}
-      <section className="bg-primary py-16 text-primary-foreground">
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 1 }}
+        className="bg-primary py-16 text-primary-foreground"
+      >
         <div className="container">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold md:text-4xl">تواصل معنا</h2>
@@ -247,7 +306,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

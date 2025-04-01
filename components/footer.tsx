@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="w-full border-t bg-background py-6">
       <div className="container flex flex-col items-center gap-4 md:flex-row md:justify-between">
         <div className="text-center md:text-right">
-          <p className="text-lg font-bold">عطور العمران</p>
+          <p className="text-lg font-bold">عطور عمران</p>
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} جميع الحقوق محفوظة
           </p>
