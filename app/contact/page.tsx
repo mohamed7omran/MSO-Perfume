@@ -108,7 +108,7 @@ export default function ContactPage() {
                 className="rounded-full h-12 w-12 hover:bg-muted/80"
               >
                 <Link
-                  href="https://instagram.com/elomranperfume"
+                  href="https://www.instagram.com/omranperfumes/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
@@ -123,7 +123,7 @@ export default function ContactPage() {
                 className="rounded-full h-12 w-12 hover:bg-muted/80"
               >
                 <Link
-                  href="https://facebook.com/elomranperfume"
+                  href="https://www.facebook.com/share/g/18vuasFY4m/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"

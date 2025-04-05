@@ -13,7 +13,7 @@ const amiri = Amiri({
 });
 
 export const metadata: Metadata = {
-  title: "عطور عمران | El-Omran Perfume",
+  title: "عطور عمران | Omran Perfume",
   description: "عطور عمران - عطور فاخرة بجودة عالية",
   generator: "v0.dev",
 };
@@ -24,13 +24,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" suppressHydrationWarning>
       <body
         className={`${amiri.variable} font-amiri min-h-screen flex flex-col`}
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

@@ -10,18 +10,28 @@ import { Badge } from "@/components/ui/badge";
 import { getProducts } from "@/lib/products";
 import type { Product } from "@/types/product";
 import { motion } from "framer-motion";
-const imgs = [
-  "/perfume1.png",
-  "/perfume2.png",
-  "/perfume3.png",
-  "/perfume4.png",
-  "/perfume5.png",
-];
+
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const collections = [
+    {
+      id: "men",
+      name: "For Men",
+      image: "/placeholder.svg?height=600&width=400",
+    },
+    {
+      id: "women",
+      name: "For women",
+      image: "/placeholder.svg?height=600&width=400",
+    },
+    {
+      id: "unisex",
+      name: "Unisex",
+      image: "/placeholder.svg?height=600&width=400",
+    },
+  ];
   useEffect(() => {
     async function loadProducts() {
       try {
@@ -64,7 +74,7 @@ export default function Home() {
             transition={{ delay: 0.5, duration: 1 }}
             className="text-4xl font-bold text-primary md:text-6xl"
           >
-            عطور عمران
+            Discover Your Signature Scent
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -72,7 +82,7 @@ export default function Home() {
             transition={{ delay: 0.7, duration: 1 }}
             className="mt-4 max-w-2xl text-xl text-white md:text-2xl"
           >
-            عطور فاخرة بلمسة عربية أصيلة
+            Explore our exclusive collection of Omran Perfumes
           </motion.p>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -81,7 +91,7 @@ export default function Home() {
             className="mt-8"
           >
             <Button asChild size="lg" className="text-lg">
-              <Link href="/contact">تواصل معنا</Link>
+              <Link href="/products">Shop Now</Link>
             </Button>
           </motion.div>
         </div>
@@ -103,7 +113,7 @@ export default function Home() {
               transition={{ delay: 0.3, duration: 1 }}
               className="text-3xl font-bold md:text-4xl"
             >
-              من نحن؟
+              Who are we?
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -179,7 +189,7 @@ export default function Home() {
                   <div className="aspect-square overflow-hidden rounded-md bg-muted">
                     <Image
                       // src={product.image || "/placeholder.svg"}
-                      src={imgs[index] || "/placeholder.svg"}
+                      src={product.image || "/placeholder.svg"}
                       alt={product.name}
                       width={400}
                       height={400}
@@ -240,6 +250,30 @@ export default function Home() {
         </div>
       </motion.section>
 
+      {/* Collections */}
+      <section className="container">
+        <h2 className="text-3xl font-bold mb-8">Our Collections</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {collections.map((collection) => (
+            <Link key={collection.id} href={`/products/${collection.id}`}>
+              <div className="relative overflow-hidden rounded-lg h-[400px] group">
+                <Image
+                  src={collection.image || "/placeholder.svg"}
+                  alt={collection.name}
+                  fill
+                  className="object-cover transition-transform group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <h3 className="text-white text-2xl font-bold">
+                    {collection.name}
+                  </h3>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* Reviews Section */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
@@ -292,7 +326,7 @@ export default function Home() {
               </Button>
               <Button asChild variant="secondary" size="lg">
                 <Link
-                  href="https://instagram.com/elomranperfume"
+                  href="https://www.instagram.com/omranperfumes/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -302,7 +336,7 @@ export default function Home() {
               </Button>
               <Button asChild variant="secondary" size="lg">
                 <Link
-                  href="https://facebook.com/elomranperfume"
+                  href="https://www.facebook.com/share/g/18vuasFY4m/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

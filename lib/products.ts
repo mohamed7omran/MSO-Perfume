@@ -10,13 +10,8 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
 import type { Product } from "@/types/product";
+import crypto from "crypto";
 
 const COLLECTION_NAME = "products";
 
@@ -67,24 +62,12 @@ export async function getProductById(id: string): Promise<Product | null> {
 // Add a new product
 export async function addProduct(
   product: Omit<Product, "id">,
-  imageFile: File | null
+  imageUrl: string
 ): Promise<string> {
   try {
-    // let imageUrl = product.image;
-
-    // Upload image if provided
-    // if (imageFile) {
-    //   const storageRef = ref(
-    //     storage,
-    //     `products/${Date.now()}_${imageFile.name}`
-    //   );
-    //   await uploadBytes(storageRef, imageFile);
-    //   imageUrl = await getDownloadURL(storageRef);
-    // }
-
     const docRef = await addDoc(collection(db, COLLECTION_NAME), {
       ...product,
-      // image: imageUrl,
+      image: imageUrl,
       createdAt: new Date(),
     });
 
@@ -99,31 +82,16 @@ export async function addProduct(
 export async function updateProduct(
   id: string,
   product: Partial<Omit<Product, "id">>,
-  imageFile: File | null
+  imageUrl: string | null
 ): Promise<void> {
   try {
     const updateData = { ...product };
-
-    // Upload new image if provided
-    if (imageFile) {
-      // Delete old image if it's a Firebase Storage URL
-      if (product.image && product.image.includes("firebasestorage")) {
-        try {
-          const oldImageRef = ref(storage, product.image);
-          await deleteObject(oldImageRef);
-        } catch (error) {
-          console.error("Error deleting old image:", error);
-          // Continue even if old image deletion fails
-        }
+    if (imageUrl) {
+      if (product.image) {
+        product.image = imageUrl;
+      } else {
+        product.image = imageUrl;
       }
-
-      const storageRef = ref(
-        storage,
-        `products/${Date.now()}_${imageFile.name}`
-      );
-      await uploadBytes(storageRef, imageFile);
-      const imageUrl = await getDownloadURL(storageRef);
-      updateData.image = imageUrl;
     }
 
     const docRef = doc(db, COLLECTION_NAME, id);
@@ -138,23 +106,61 @@ export async function updateProduct(
 }
 
 // Delete a product
+function extractPublicIdFromUrl(url: string): string {
+  const regex = /\/([^/]+)\/image\/upload\/([^/]+)\/([^/]+)\.(jpg|webp|png)/;
+  const match = url.match(regex);
+
+  if (match) {
+    return match[3];
+  } else {
+    console.error("Unable to extract public_id from URL:", url);
+    throw new Error("Unable to extract public_id from URL");
+  }
+}
+function generateSignature(publicId: string): string {
+  const apiSecret = "4W4-SDUOJyL1kIMpQ2aTid7wJp8";
+  const timestamp = Math.floor(Date.now() / 1000);
+  const signatureString = `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
+  const signature = crypto
+    .createHash("sha1")
+    .update(signatureString)
+    .digest("hex");
+  return signature;
+}
+
 export async function deleteProduct(
   id: string,
   imageUrl: string
 ): Promise<void> {
   try {
-    // Delete image from storage if it's a Firebase Storage URL
-    if (imageUrl && imageUrl.includes("firebasestorage")) {
-      try {
-        const imageRef = ref(storage, imageUrl);
-        await deleteObject(imageRef);
-      } catch (error) {
-        console.error("Error deleting image:", error);
-        // Continue even if image deletion fails
+    if (imageUrl) {
+      const publicId = extractPublicIdFromUrl(imageUrl);
+      const signature = generateSignature(publicId); // توليد الـ signature
+      const timestamp = Math.floor(Date.now() / 1000); // الوقت الحالي بالثواني
+
+      // إرسال طلب حذف الصورة من Cloudinary عبر API
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/dihsp2kez/image/destroy`,
+        {
+          method: "POST",
+          body: new URLSearchParams({
+            public_id: publicId,
+            api_key: "478565577587379",
+            api_secret: "4W4-SDUOJyL1kIMpQ2aTid7wJp8",
+            signature: signature,
+            timestamp: timestamp.toString(),
+          }),
+        }
+      );
+
+      const data = await response.json();
+      if (data.result === "ok") {
+        console.log("Image deleted from Cloudinary");
+      } else {
+        console.error("Error deleting image from Cloudinary:", data);
       }
     }
 
-    // Delete document from Firestore
     await deleteDoc(doc(db, COLLECTION_NAME, id));
   } catch (error) {
     console.error("Error deleting product:", error);

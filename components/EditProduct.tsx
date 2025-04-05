@@ -1,10 +1,9 @@
 "use client";
 
 import type React from "react";
-import { CldUploadWidget } from "next-cloudinary";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { addProduct } from "@/lib/products";
+import { getProductById, updateProduct } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,11 +18,21 @@ import {
 } from "@/components/ui/card";
 import { Loader2, ArrowRight } from "lucide-react";
 import type { Product } from "@/types/product";
+import { CldUploadWidget } from "next-cloudinary";
 
-export default function AddProductPage() {
+export default function EditProduct({
+  id,
+  product,
+}: {
+  id: string;
+  product: any;
+}) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [formData, setFormData] = useState<Omit<Product, "id">>({
     name: "",
@@ -37,6 +46,42 @@ export default function AddProductPage() {
     category: "",
     isNew: false,
   });
+
+  useEffect(() => {
+    async function loadProduct() {
+      try {
+        setLoading(true);
+        const product = await getProductById(id);
+
+        if (!product) {
+          setError("المنتج غير موجود");
+          return;
+        }
+
+        setFormData({
+          name: product.name,
+          description: product.description,
+          notes: product.notes,
+          price: product.price,
+          discountedPrice: product.discountedPrice,
+          offer: product.offer,
+          image: product.image,
+          brand: product.brand,
+          category: product.category,
+          isNew: product.isNew,
+        });
+
+        setImageUrl(product.image);
+      } catch (err) {
+        setError("حدث خطأ أثناء تحميل بيانات المنتج");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProduct();
+  }, [id]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -91,20 +136,45 @@ export default function AddProductPage() {
     }
 
     try {
-      setLoading(true);
+      setSaving(true);
       setError(null);
 
-      console.log("imageUrl :", imageUrl);
-      await addProduct(formData, imageUrl || "");
+      await updateProduct(id, formData, imageUrl);
       router.push("/admin/products");
-      setImageUrl(null);
     } catch (err) {
-      setError("حدث خطأ أثناء إضافة المنتج");
+      setError("حدث خطأ أثناء تحديث المنتج");
       console.error(err);
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex h-[50vh] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="mr-2">جاري تحميل بيانات المنتج...</span>
+      </div>
+    );
+  }
+
+  if (error && !formData.name) {
+    return (
+      <div className="container py-12">
+        <div className="rounded-lg border border-destructive bg-destructive/10 p-4 text-center text-destructive">
+          {error}
+        </div>
+        <Button
+          variant="outline"
+          onClick={() => router.push("/admin/products")}
+          className="mt-4"
+        >
+          <ArrowRight className="ml-2 h-4 w-4" />
+          العودة إلى قائمة المنتجات
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-12">
@@ -117,7 +187,7 @@ export default function AddProductPage() {
           <ArrowRight className="ml-2 h-4 w-4" />
           العودة
         </Button>
-        <h1 className="text-3xl font-bold">إضافة منتج جديد</h1>
+        <h1 className="text-3xl font-bold">تعديل المنتج</h1>
       </div>
 
       {error && (
@@ -156,28 +226,7 @@ export default function AddProductPage() {
                   rows={3}
                 />
               </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="brand">العلامة التجارية</Label>
-                  <Input
-                    id="brand"
-                    name="brand"
-                    value={formData.brand}
-                    onChange={handleInputChange}
-                    placeholder="مثال: عمران | اخر"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="category">الفئة</Label>
-                  <Input
-                    id="category"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    placeholder="مثال: رجالي، نسائي"
-                  />
-                </div>
-              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="notes">المكونات</Label>
                 <Input
@@ -191,7 +240,7 @@ export default function AddProductPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="price">السعر (جنيه)</Label>
+                  <Label htmlFor="price">السعر (ر.س)</Label>
                   <Input
                     id="price"
                     name="price"
@@ -206,9 +255,7 @@ export default function AddProductPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="discountedPrice">
-                    السعر بعد الخصم (جنيه)
-                  </Label>
+                  <Label htmlFor="discountedPrice">السعر بعد الخصم (ر.س)</Label>
                   <Input
                     id="discountedPrice"
                     name="discountedPrice"
@@ -261,6 +308,8 @@ export default function AddProductPage() {
                     />
                   ) : (
                     <div className="flex h-full w-full flex-col items-center justify-center p-4 text-center text-muted-foreground">
+                      {/* <Upload className="mb-2 h-10 w-10" /> */}
+
                       <p>اختر صورة للمنتج</p>
                       <p className="text-xs mt-3">PNG, JPG, WEBP</p>
                     </div>
@@ -304,14 +353,14 @@ export default function AddProductPage() {
           >
             إلغاء
           </Button>
-          <Button type="submit" disabled={loading}>
-            {loading ? (
+          <Button type="submit" disabled={saving}>
+            {saving ? (
               <>
                 <Loader2 className="ml-2 h-4 w-4 animate-spin" />
                 جاري الحفظ...
               </>
             ) : (
-              "حفظ المنتج"
+              "حفظ التغييرات"
             )}
           </Button>
         </CardFooter>

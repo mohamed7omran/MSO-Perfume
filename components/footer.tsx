@@ -23,7 +23,7 @@ export default function Footer() {
             <MessageSquare className="h-5 w-5" />
           </Link>
           <Link
-            href="https://instagram.com/elomranperfume"
+            href="https://www.instagram.com/omranperfumes/"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -32,7 +32,7 @@ export default function Footer() {
             <Instagram className="h-5 w-5" />
           </Link>
           <Link
-            href="https://facebook.com/elomranperfume"
+            href="https://www.facebook.com/share/g/18vuasFY4m/"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground"

@@ -55,6 +55,9 @@
   * {
     @apply border-border;
   }
+  html {
+    color-scheme:"dark"
+  }
   body {
     @apply bg-background text-foreground transition-colors duration-300;
   }
