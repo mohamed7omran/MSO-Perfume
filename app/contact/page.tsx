@@ -134,67 +134,68 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div>
-            <h2 className="text-2xl font-bold mb-6">Send us a message</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block mb-2 font-medium">
-                  Name
-                </label>
-                <Input
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="أدخل اسمك الكامل"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block mb-2 font-medium">
-                  Email
-                </label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="أدخل بريدك الإلكتروني"
-                />
-              </div>
-              <div>
-                <label htmlFor="phone" className="block mb-2 font-medium">
-                  Phone
-                </label>
-                <Input
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="أدخل رقم هاتفك"
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block mb-2 font-medium">
-                  Message
-                </label>
-                <Textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  placeholder="اكتب رسالتك هنا"
-                  rows={5}
-                />
-              </div>
-              <Button type="submit" className="w-full">
-                Send message
-              </Button>
-            </form>
-          </div>
+          <form
+            action="https://formsubmit.co/mo1234512345ed@gmail.com"
+            method="POST"
+            className="space-y-4"
+          >
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
+            <input
+              type="hidden"
+              name="_autoresponse"
+              value="تم استلام رسالتك، وسنرد عليك قريبًا إن شاء الله."
+            />
+
+            <div>
+              <label htmlFor="name" className="block mb-2 font-medium">
+                Name
+              </label>
+              <Input
+                id="name"
+                name="name"
+                required
+                placeholder="أدخل اسمك الكامل"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block mb-2 font-medium">
+                Email
+              </label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                required
+                placeholder="أدخل بريدك الإلكتروني"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="phone" className="block mb-2 font-medium">
+                Phone
+              </label>
+              <Input id="phone" name="phone" placeholder="أدخل رقم هاتفك" />
+            </div>
+
+            <div>
+              <label htmlFor="message" className="block mb-2 font-medium">
+                Message
+              </label>
+              <Textarea
+                id="message"
+                name="message"
+                required
+                placeholder="اكتب رسالتك هنا"
+                rows={5}
+              />
+            </div>
+
+            <Button type="submit" className="w-full">
+              Send message
+            </Button>
+          </form>
         </div>
 
         {/* Google Map (Optional) */}

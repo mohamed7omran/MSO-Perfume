@@ -36,6 +36,7 @@ import { getProductById } from "@/lib/products";
 import { Label } from "@/components/ui/label";
 import { MenubarRadioGroup } from "@/components/ui/menubar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { FaWhatsapp } from "react-icons/fa6";
 
 type CartItem = {
   id: string;
@@ -63,7 +64,102 @@ export default function CartPage() {
     address: "",
     city: "",
   });
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+  });
 
+  const handleSendWhatsApp = () => {
+    const isValid = validateForm();
+    if (!isValid) {
+      return;
+    }
+    if (cartItems.length === 0) return;
+
+    let total = 0;
+    const shipping = 50.0;
+    let message = "🧴 طلب جديد من الموقع:\n\n📦 المنتجات:\n";
+
+    cartItems.forEach((item, index) => {
+      const itemTotal = item.discountedPrice * item.quantity;
+      total = itemTotal + shipping;
+
+      message += `${index + 1}. ${item.name} - السعر: ${
+        item.discountedPrice
+      } جنيه × ${item.quantity} = ${itemTotal} جنيه\n`;
+    });
+
+    message += `\n💰 مصاريف الشحن: ${shipping} جنيه\n`;
+    message += `\n💰 الإجمالي الكلي: ${total} جنيه\n`;
+
+    message += "\n📍 تفاصيل الشحن:\n";
+    message += `الاسم: ${formData.firstName} ${formData.lastName}\n`;
+    message += `الإيميل: ${formData.email}\n`;
+    message += `رقم الهاتف: ${formData.phone}\n`;
+    message += `العنوان: ${formData.address}, ${formData.city}`;
+
+    const encoded = encodeURIComponent(message);
+    const whatsappLink = `https://wa.me/+201030576522?text=${encoded}`;
+    window.open(whatsappLink, "_blank");
+
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      address: "",
+      city: "",
+    });
+    setErrors({});
+  };
+
+  const validateForm = () => {
+    let newErrors: any = {};
+    let isValid = true;
+
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "first name is required";
+      isValid = false;
+    }
+
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "last name is required";
+      isValid = false;
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "email is required";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "email is invalid";
+      isValid = false;
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "phone is required";
+      isValid = false;
+    } else if (!/^01[0-2,5]{1}[0-9]{8}$/.test(formData.phone)) {
+      newErrors.phone = "phone is invalid";
+      isValid = false;
+    }
+
+    if (!formData.address.trim()) {
+      newErrors.address = "address is required";
+      isValid = false;
+    }
+
+    if (!formData.city.trim()) {
+      newErrors.city = "city is required";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
@@ -127,28 +223,6 @@ export default function CartPage() {
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
-
-  const handleSendWhatsApp = () => {
-    if (cartItems.length === 0) return;
-
-    let message = "🧴 طلب جديد من الموقع:\n\n📦 المنتجات:\n";
-
-    cartItems.forEach((item, index) => {
-      message += `${index + 1}. ${item.name} - السعر: ${
-        item.discountedPrice
-      } جنيه\n`;
-    });
-
-    message += "\n📍 تفاصيل الشحن:\n";
-    message += `الاسم: ${formData.firstName} ${formData.lastName}\n`;
-    message += `الإيميل: ${formData.email}\n`;
-    message += `رقم الهاتف: ${formData.phone}\n`;
-    message += `العنوان: ${formData.address}, ${formData.city}`;
-
-    const encoded = encodeURIComponent(message);
-    const whatsappLink = `https://wa.me/+201030576522?text=${encoded}`;
-    window.open(whatsappLink, "_blank");
-  };
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -309,6 +383,11 @@ export default function CartPage() {
                           value={formData.firstName}
                           onChange={handleChange}
                         />
+                        {errors.firstName && (
+                          <p className="text-red-500 text-sm">
+                            {errors.firstName}
+                          </p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="lastName">Last Name</Label>
@@ -318,6 +397,11 @@ export default function CartPage() {
                           value={formData.lastName}
                           onChange={handleChange}
                         />
+                        {errors.lastName && (
+                          <p className="text-red-500 text-sm">
+                            {errors.lastName}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -330,6 +414,9 @@ export default function CartPage() {
                         value={formData.email}
                         onChange={handleChange}
                       />
+                      {errors.email && (
+                        <p className="text-red-500 text-sm">{errors.email}</p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -341,6 +428,9 @@ export default function CartPage() {
                         value={formData.phone}
                         onChange={handleChange}
                       />
+                      {errors.phone && (
+                        <p className="text-red-500 text-sm">{errors.phone}</p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -351,6 +441,9 @@ export default function CartPage() {
                         value={formData.address}
                         onChange={handleChange}
                       />
+                      {errors.address && (
+                        <p className="text-red-500 text-sm">{errors.address}</p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -361,6 +454,9 @@ export default function CartPage() {
                         value={formData.city}
                         onChange={handleChange}
                       />
+                      {errors.city && (
+                        <p className="text-red-500 text-sm">{errors.city}</p>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -418,9 +514,8 @@ export default function CartPage() {
                       className="w-full"
                       size="lg"
                     >
-                      {/* <Link href="https://wa.me/+201030576522" target="_blank"> */}
                       Place Order
-                      {/* </Link> */}
+                      <FaWhatsapp />
                     </Button>
                   ) : (
                     <Button

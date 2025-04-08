@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Instagram, Facebook, MessageSquare } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa6";
 
 export default function Footer() {
   const footerLinks = [
@@ -45,7 +46,7 @@ export default function Footer() {
                 className="rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
                 aria-label="WhatsApp"
               >
-                <MessageSquare className="h-5 w-5 text-white" />
+                <FaWhatsapp className="h-5 w-5 text-white" />
               </Link>
               <Link
                 href="https://www.instagram.com/omranperfumes/"

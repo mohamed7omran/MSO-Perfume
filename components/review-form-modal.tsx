@@ -93,9 +93,10 @@ export function ReviewFormModal({ open, onOpenChange }: ReviewFormModalProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle className="text-xl">إضافة تقييم</DialogTitle>
+          <DialogTitle className="text-xl"> Add a Review</DialogTitle>
           <DialogDescription>
-            شاركنا رأيك في منتجاتنا. تقييمك يساعدنا على التحسين المستمر.
+            Share your opinion about our products. Your rating helps us improve
+            our vision.
           </DialogDescription>
         </DialogHeader>
 
@@ -117,9 +118,12 @@ export function ReviewFormModal({ open, onOpenChange }: ReviewFormModalProps) {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-medium">تم إرسال تقييمك بنجاح!</h3>
+            <h3 className="text-xl font-medium">
+              Your review has been submitted successfully!
+            </h3>
             <p className="mt-2 text-muted-foreground">
-              شكراً لمشاركة رأيك معنا. نقدر ملاحظاتك.
+              Thank you for sharing your opinion with us. We appreciate your
+              feedback.
             </p>
           </div>
         ) : (
@@ -127,7 +131,7 @@ export function ReviewFormModal({ open, onOpenChange }: ReviewFormModalProps) {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor="name" className="mb-2 block font-medium">
-                  الاسم
+                  Name
                 </label>
                 <Input
                   id="name"
@@ -156,7 +160,7 @@ export function ReviewFormModal({ open, onOpenChange }: ReviewFormModalProps) {
 
             <div>
               <label htmlFor="product" className="mb-2 block font-medium">
-                المنتج
+                Product
               </label>
               <Select
                 value={formData.product}
@@ -177,7 +181,6 @@ export function ReviewFormModal({ open, onOpenChange }: ReviewFormModalProps) {
             </div>
 
             <div>
-              <label className="mb-2 block font-medium">التقييم</label>
               <StarRatingInput
                 rating={formData.rating}
                 onRatingChange={handleRatingChange}
@@ -186,7 +189,7 @@ export function ReviewFormModal({ open, onOpenChange }: ReviewFormModalProps) {
 
             <div>
               <label htmlFor="review" className="mb-2 block font-medium">
-                التقييم
+                Review
               </label>
               <Textarea
                 id="review"
@@ -206,10 +209,10 @@ export function ReviewFormModal({ open, onOpenChange }: ReviewFormModalProps) {
                 onClick={() => onOpenChange(false)}
                 className="mt-3 sm:mt-0 sm:ml-3"
               >
-                إلغاء
+                Cancel
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "جاري الإرسال..." : "إرسال التقييم"}
+                {isSubmitting ? " wait..." : " Send"}
               </Button>
             </DialogFooter>
           </form>
