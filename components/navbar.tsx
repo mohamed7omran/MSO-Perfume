@@ -80,7 +80,10 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
 
-        <div className="md:hidden ">
+        <div className="md:hidden flex items-center justify-center">
+          <Link href="/cart">
+            <ShoppingBag className="h-5 w-5 mr-5" />
+          </Link>
           <ThemeToggle />
           <Button
             variant="ghost"

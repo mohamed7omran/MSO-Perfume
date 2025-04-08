@@ -80,13 +80,16 @@ export default function CartPage() {
     }
     if (cartItems.length === 0) return;
 
-    let total = 0;
-    const shipping = 50.0;
     let message = "🧴 طلب جديد من الموقع:\n\n📦 المنتجات:\n";
 
+    const subtotal = cartItems.reduce(
+      (sum, item) => sum + item.discountedPrice * item.quantity,
+      0
+    );
+    const shipping = 50.0;
+    let total = subtotal + shipping;
     cartItems.forEach((item, index) => {
       const itemTotal = item.discountedPrice * item.quantity;
-      total = itemTotal + shipping;
 
       message += `${index + 1}. ${item.name} - السعر: ${
         item.discountedPrice
