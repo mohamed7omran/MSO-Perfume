@@ -15,6 +15,7 @@ export default function ReturnPolicyPage() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
       className="flex min-h-screen flex-col"
+      dir="rtl"
     >
       <main className="flex-1 container py-12">
         <div className="space-y-6">

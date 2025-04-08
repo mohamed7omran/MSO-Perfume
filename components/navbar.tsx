@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { Divide, Menu, X } from "lucide-react";
+import { Divide, Menu, ShoppingBag, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -11,20 +11,12 @@ import { useTheme } from "next-themes";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-  const { theme, setTheme } = useTheme();
-  useEffect(() => {
-    setTheme("dark");
-  }, []);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const { theme } = useTheme();
 
-  if (!mounted) return null;
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -79,7 +71,10 @@ export default function Navbar() {
             </Link>
           </nav>
         </div>
-        <div className="hidden md:flex">
+        <div className="hidden md:flex items-center justify-center ">
+          <Link href="/cart">
+            <ShoppingBag className="h-5 w-5 mr-5" />
+          </Link>
           <ThemeToggle />
         </div>
 

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Tag, Loader2 } from "lucide-react";
+import { Tag, Loader2, ShoppingBag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getProducts } from "@/lib/products";
 import type { Product } from "@/types/product";
@@ -15,17 +15,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Cookies from "js-cookie";
+import { useSearchParams } from "next/navigation";
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const searchParams = useSearchParams();
 
   const [filter, setFilter] = useState({
     price: "",
     brand: "",
     category: "",
   });
+  useEffect(() => {
+    const collection = searchParams.get("collection");
+    setFilter((prev) => ({
+      ...prev,
+      category: collection || "",
+    }));
+  }, []);
+
+  const handleAddToCart = (id: string) => {
+    const cartCookie = Cookies.get("cart");
+    const currentCart = cartCookie ? JSON.parse(cartCookie) : [];
+
+    if (!currentCart.includes(id)) {
+      const updatedCart = [...currentCart, id];
+      Cookies.set("cart", JSON.stringify(updatedCart), { expires: 7 });
+    }
+  };
+
   useEffect(() => {
     async function loadProducts() {
       try {
@@ -77,8 +99,8 @@ export default function ProductsPage() {
   if (loading) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
+        <span className="mr-2">Loading products...</span>
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="mr-2">جاري تحميل المنتجات...</span>
       </div>
     );
   }
@@ -97,9 +119,9 @@ export default function ProductsPage() {
     return (
       <div className="container py-12">
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-3xl font-bold md:text-4xl">منتجاتنا</h1>
+          <h1 className="text-3xl font-bold md:text-4xl">Our products</h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            لا توجد منتجات متاحة حالياً، يرجى العودة لاحقاً.
+            There are no products currently available Please come back later.
           </p>
         </div>
       </div>
@@ -110,10 +132,10 @@ export default function ProductsPage() {
     <div className="py-12">
       <div className="container">
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-3xl font-bold md:text-4xl">منتجاتنا</h1>
+          <h1 className="text-3xl font-bold md:text-4xl">Our products</h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            اكتشف تشكيلتنا المميزة من العطور الفاخرة المصنوعة من أجود المكونات
-            الطبيعية
+            Discover our exclusive collection of luxury perfumes made from the
+            finest natural ingredients.
           </p>
         </div>
 
@@ -123,13 +145,13 @@ export default function ProductsPage() {
             onValueChange={(value) => setFilter({ ...filter, price: value })}
           >
             <SelectTrigger id="price">
-              <SelectValue placeholder="اختر الترتيب" />
+              <SelectValue placeholder="Choose the sorting" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={"all"}>الكل</SelectItem>
-              <SelectItem value={"asc"}>الأقل سعرًا</SelectItem>
-              <SelectItem value={"desc"}>الأعلى سعرًا</SelectItem>
-              <SelectItem value={"newest"}>الأحدث </SelectItem>
+              <SelectItem value={"all"}>All</SelectItem>
+              <SelectItem value={"asc"}>Lowest Price</SelectItem>
+              <SelectItem value={"desc"}>Highest Price</SelectItem>
+              <SelectItem value={"newest"}>Newest</SelectItem>
             </SelectContent>
           </Select>
           <Select
@@ -137,12 +159,12 @@ export default function ProductsPage() {
             onValueChange={(value) => setFilter({ ...filter, category: value })}
           >
             <SelectTrigger id="category">
-              <SelectValue placeholder="اختر التصنيف" />
+              <SelectValue placeholder="Choose the category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={"all"}>الكل</SelectItem>
-              <SelectItem value={"رجالي"}> رجالي</SelectItem>
-              <SelectItem value={"نسائي"}> نسائي</SelectItem>
+              <SelectItem value={"all"}>All</SelectItem>
+              <SelectItem value={"men"}>Men</SelectItem>
+              <SelectItem value={"women"}>Women</SelectItem>
             </SelectContent>
           </Select>
           <Select
@@ -150,11 +172,11 @@ export default function ProductsPage() {
             onValueChange={(value) => setFilter({ ...filter, brand: value })}
           >
             <SelectTrigger id="brand">
-              <SelectValue placeholder="اختر البراند" />
+              <SelectValue placeholder="Choose the brand" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={"all"}>كل البراندات</SelectItem>
-              <SelectItem value={"عمران"}> عمران</SelectItem>
+              <SelectItem value={"all"}>All Brands</SelectItem>
+              <SelectItem value={"omran"}>Omran</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -166,7 +188,7 @@ export default function ProductsPage() {
               className="group  relative overflow-hidden rounded-lg border bg-background p-6 transition-all hover:shadow-lg dark:hover:shadow-primary/10"
             >
               {product.isNew && (
-                <Badge className="absolute right-4 top-4 z-10">جديد</Badge>
+                <Badge className="absolute right-4 top-4 z-10">New</Badge>
               )}
               {product.price > product.discountedPrice && (
                 <div className="absolute left-4 top-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-destructive font-bold text-destructive-foreground">
@@ -213,27 +235,28 @@ export default function ProductsPage() {
                     {product.price > product.discountedPrice ? (
                       <div className="flex flex-col items-start">
                         <span className="text-sm line-through text-muted-foreground">
-                          {product.price}جنيه
+                          {product.price} EGP
                         </span>
                         <span className="text-xl  font-bold text-destructive">
-                          {product.discountedPrice}جنيه
+                          {product.discountedPrice} EGP
                         </span>
                       </div>
                     ) : (
                       <span className="text-xl text-destructive mr-2 font-bold">
-                        {product.price}جنيه
+                        {product.price} EGP
                       </span>
                     )}
                   </div>
-                  <Button asChild>
-                    <Link
-                      href="https://wa.me/+201030576522"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <MessageSquare className="ml-2 h-4 w-4" />
-                      تواصل للطلب
-                    </Link>
+                  <Button
+                    asChild
+                    onClick={() => {
+                      handleAddToCart(product.id);
+                    }}
+                  >
+                    <div>
+                      <ShoppingBag className="h-5 w-5" />
+                      Add to Cart
+                    </div>
                   </Button>
                 </div>
               </div>
@@ -244,3 +267,4 @@ export default function ProductsPage() {
     </div>
   );
 }
+// href="https://wa.me/+201030576522"

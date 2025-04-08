@@ -14,8 +14,7 @@ const reviews = [
     avatar: "/avatar.png",
     rating: 5,
     date: "15 مارس 2024",
-    review:
-      "من أفضل العطور التي جربتها، رائحة فريدة ومميزة تدوم لفترة طويلة. أنصح الجميع بتجربة عطور عمران.",
+    review: "العطر ريحته حلوة وبتقعد وقت كويس. دي أول مرة أجربه وبصراحة عجبني.",
     product: "عطر تمبتيشن",
   },
   {
@@ -24,8 +23,7 @@ const reviews = [
     avatar: "/avatar.png",
     rating: 4,
     date: "2 أبريل 2024",
-    review:
-      "عطر رائع بمكونات طبيعية ورائحة جذابة. استخدمته في مناسبة خاصة وتلقيت الكثير من الإطراء.",
+    review: "ريحته ناعمة ولطيفة، استخدمته في خروجة وكل الناس كانت بتسألني عنه.",
     product: "شانيل N°5",
   },
   {
@@ -34,8 +32,7 @@ const reviews = [
     avatar: "/avatar.png",
     rating: 5,
     date: "20 فبراير 2024",
-    review:
-      "تجربة شراء ممتازة والتوصيل كان سريعاً. العطر فاخر جداً ويستحق السعر. سأكرر التجربة مع عطور أخرى من عمران.",
+    review: "الطلب وصل بسرعة، والتغليف كان كويس. العطر نفسه فخم ومميز.",
     product: "جنتلمان أونلي",
   },
   {
@@ -44,8 +41,7 @@ const reviews = [
     avatar: "/avatar.png",
     rating: 5,
     date: "5 مايو 2024",
-    review:
-      "أهديت هذا العطر لزوجي في عيد ميلاده وأحبه كثيراً. رائحته قوية ومميزة وتدوم طويلاً.",
+    review: "جبت العطر هدية لجوزي، وعجبته الريحة جداً. ريحة واضحة وبتثبت.",
     product: "دينيم كولكشن",
   },
   {
@@ -54,8 +50,7 @@ const reviews = [
     avatar: "/avatar.png",
     rating: 4,
     date: "10 يناير 2024",
-    review:
-      "عطر فاخر بمكونات عالية الجودة. أستخدمه للمناسبات الخاصة وأتلقى دائماً تعليقات إيجابية.",
+    review: "جودة العطر كويسة وريحتُه مميزة. مناسب للمناسبات.",
     product: "بنتلي مومنتوم",
   },
   {
@@ -64,8 +59,7 @@ const reviews = [
     avatar: "/avatar.png",
     rating: 5,
     date: "25 مارس 2024",
-    review:
-      "من أفضل العطور النسائية التي جربتها. رائحة ناعمة وأنيقة تدوم طوال اليوم. سعيدة جداً بهذا الاختيار.",
+    review: "ريحته ناعمة وبسيطة، وحسيت إنه لايق عليا جداً. اختيار موفق.",
     product: "عطر عمران الخاص",
   },
   {
@@ -74,8 +68,7 @@ const reviews = [
     avatar: "/avatar.png",
     rating: 5,
     date: "12 أبريل 2024",
-    review:
-      "خدمة عملاء ممتازة وتوصيل سريع. العطر رائع والعبوة أنيقة جداً. تجربة شراء مميزة.",
+    review: "الخدمة كانت ممتازة والعطر شكله شيك وريحتُه عجبتني.",
     product: "عطر تمبتيشن",
   },
   {
@@ -84,8 +77,7 @@ const reviews = [
     avatar: "/avatar.png",
     rating: 4,
     date: "8 فبراير 2024",
-    review:
-      "عطر جميل ومميز، رائحته تدوم لفترة طويلة. التغليف أنيق والتوصيل كان سريعاً.",
+    review: "العطر حلو وريحته بتثبت، والتوصيل جالي بسرعة.",
     product: "شانيل N°5",
   },
 ];
@@ -115,21 +107,24 @@ export default function ReviewsPage() {
     <div className="py-12">
       <div className="container">
         <div className="mb-12 rounded-lg border bg-muted/30 p-8 text-center">
-          <h2 className="text-2xl font-bold">شاركنا رأيك</h2>
+          <h2 className="text-2xl font-bold">Share Your Opinion</h2>
           <p className="mt-4 text-muted-foreground">
-            نحن نقدر آراء عملائنا ونسعى دائماً لتحسين منتجاتنا وخدماتنا. شاركنا
-            تجربتك مع عطور عمران.
+            {" "}
+            We value our customers' feedback and are always striving to improve
+            our products and services. Share your experience with Omran
+            Perfumes.
           </p>
           <div className="mt-6">
             <Button size="lg" onClick={() => setIsModalOpen(true)}>
-              أرسل رأيك
+              Submit Your Review
             </Button>
           </div>
         </div>
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-3xl font-bold md:text-4xl">آراء العملاء</h1>
+          <h1 className="text-3xl font-bold md:text-4xl">Customer Reviews</h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            اطلع على تجارب وآراء عملائنا الكرام مع عطور عمران
+            Take a look at what our valued customers have to say about Omran
+            Perfumes.
           </p>
         </div>
 

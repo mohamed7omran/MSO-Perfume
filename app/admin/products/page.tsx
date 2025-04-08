@@ -84,8 +84,8 @@ export default function AdminProductsPage() {
   if (loading) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
+        <span className="mr-2">Loading products...</span>
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="mr-2">جاري تحميل المنتجات...</span>
       </div>
     );
   }
@@ -141,15 +141,15 @@ export default function AdminProductsPage() {
                     {product.discountedPrice < product.price ? (
                       <div className="flex flex-col">
                         <span className="text-sm line-through text-muted-foreground">
-                          {product.price}جنيه
+                          {product.price}EGP
                         </span>
                         <span className="text-lg font-bold text-destructive">
-                          {product.discountedPrice}جنيه
+                          {product.discountedPrice}EGP
                         </span>
                       </div>
                     ) : (
                       <span className="text-lg font-bold">
-                        {product.price}جنيه
+                        {product.price}EGP
                       </span>
                     )}
                   </div>

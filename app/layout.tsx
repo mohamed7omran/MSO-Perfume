@@ -26,16 +26,11 @@ export default function RootLayout({
   return (
     <html lang="ar" suppressHydrationWarning>
       <body
-        className={`${amiri.variable} font-amiri min-h-screen flex flex-col`}
+        className={`${amiri.variable} font-arial min-h-screen flex flex-col`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
           <Navbar />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow ">{children}</main>
           <Footer />
         </ThemeProvider>
       </body>

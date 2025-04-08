@@ -28,7 +28,7 @@ export default function ContactPage() {
     e.preventDefault();
     // Here you would typically send the form data to your backend
     console.log("Form submitted:", formData);
-    alert("تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.");
+    alert("Your message has been sent successfully! We will contact you soon.");
     setFormData({
       name: "",
       email: "",
@@ -41,24 +41,24 @@ export default function ContactPage() {
     <div className="py-12">
       <div className="container">
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-3xl font-bold md:text-4xl">تواصل معنا</h1>
+          <h1 className="text-3xl font-bold md:text-4xl">Contact us</h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            نحن سعداء بالإجابة على استفساراتكم وتلبية طلباتكم
+            We are happy to answer your inquiries and meet your requests.{" "}
           </p>
         </div>
 
         <div className="mt-12 grid gap-12 md:grid-cols-2">
           <div>
-            <h2 className="text-2xl font-bold mb-6">معلومات التواصل</h2>
+            <h2 className="text-2xl font-bold mb-6">Contact information</h2>
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
                   <Mail className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="font-medium">البريد الإلكتروني</p>
+                  <p className="font-medium">Email</p>
                   <p className="text-muted-foreground">
-                    info@elomranperfume.com
+                    mo1234512345ed@gmail.com
                   </p>
                 </div>
               </div>
@@ -67,7 +67,7 @@ export default function ContactPage() {
                   <MessageSquare className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="font-medium">واتساب</p>
+                  <p className="font-medium">What's</p>
                   <p className="text-muted-foreground">+201030576522</p>
                 </div>
               </div>
@@ -76,7 +76,7 @@ export default function ContactPage() {
                   <MapPin className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="font-medium">العنوان</p>
+                  <p className="font-medium">Address</p>
                   <p className="text-muted-foreground">
                     القاهرة، جمهورية مصر العربية
                   </p>
@@ -84,7 +84,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold mt-10 mb-6">تابعنا على</h2>
+            <h2 className="text-2xl font-bold mt-10 mb-6">Follow Us </h2>
             <div className="flex gap-4">
               <Button
                 asChild
@@ -123,7 +123,7 @@ export default function ContactPage() {
                 className="rounded-full h-12 w-12 hover:bg-muted/80"
               >
                 <Link
-                  href="https://www.facebook.com/share/g/18vuasFY4m/"
+                  href="https://www.facebook.com/share/1AKQYzt5cL/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
@@ -135,11 +135,11 @@ export default function ContactPage() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold mb-6">أرسل لنا رسالة</h2>
+            <h2 className="text-2xl font-bold mb-6">Send us a message</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block mb-2 font-medium">
-                  الاسم
+                  Name
                 </label>
                 <Input
                   id="name"
@@ -152,7 +152,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <label htmlFor="email" className="block mb-2 font-medium">
-                  البريد الإلكتروني
+                  Email
                 </label>
                 <Input
                   id="email"
@@ -166,7 +166,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <label htmlFor="phone" className="block mb-2 font-medium">
-                  رقم الهاتف
+                  Phone
                 </label>
                 <Input
                   id="phone"
@@ -178,7 +178,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <label htmlFor="message" className="block mb-2 font-medium">
-                  الرسالة
+                  Message
                 </label>
                 <Textarea
                   id="message"
@@ -191,7 +191,7 @@ export default function ContactPage() {
                 />
               </div>
               <Button type="submit" className="w-full">
-                إرسال الرسالة
+                Send message
               </Button>
             </form>
           </div>
