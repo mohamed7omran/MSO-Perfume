@@ -37,7 +37,9 @@ import { Label } from "@/components/ui/label";
 import { MenubarRadioGroup } from "@/components/ui/menubar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FaWhatsapp } from "react-icons/fa6";
-
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
 type CartItem = {
   id: string;
   name: string;
@@ -56,6 +58,7 @@ export default function CartPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCheckOut, setIsCheckOut] = useState(false);
+  const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -73,51 +76,59 @@ export default function CartPage() {
     city: "",
   });
 
-  const handleSendWhatsApp = () => {
+  const clearCart = () => {
+    setCartItems([]);
+    Cookies.remove("cart");
+  };
+  const handleConfirmOrder = async () => {
     const isValid = validateForm();
-    if (!isValid) {
-      return;
-    }
-    if (cartItems.length === 0) return;
-
-    let message = "🧴 طلب جديد من الموقع:\n\n📦 المنتجات:\n";
+    if (!isValid || cartItems.length === 0) return;
 
     const subtotal = cartItems.reduce(
       (sum, item) => sum + item.discountedPrice * item.quantity,
       0
     );
     const shipping = 50.0;
-    let total = subtotal + shipping;
-    cartItems.forEach((item, index) => {
-      const itemTotal = item.discountedPrice * item.quantity;
+    const total = subtotal + shipping;
 
-      message += `${index + 1}. ${item.name} - السعر: ${
-        item.discountedPrice
-      } جنيه × ${item.quantity} = ${itemTotal} جنيه\n`;
-    });
+    const orderData = {
+      customer: {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phone: formData.phone,
+        address: `${formData.address}, ${formData.city}`,
+      },
+      items: cartItems.map((item) => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.discountedPrice,
+      })),
+      total,
+      shipping,
+      status: "pending",
+      createdAt: Timestamp.now(),
+    };
 
-    message += `\n💰 مصاريف الشحن: ${shipping} جنيه\n`;
-    message += `\n💰 الإجمالي الكلي: ${total} جنيه\n`;
+    try {
+      await addDoc(collection(db, "orders"), orderData);
+      alert("تم إرسال الطلب بنجاح! ✅");
 
-    message += "\n📍 تفاصيل الشحن:\n";
-    message += `الاسم: ${formData.firstName} ${formData.lastName}\n`;
-    message += `الإيميل: ${formData.email}\n`;
-    message += `رقم الهاتف: ${formData.phone}\n`;
-    message += `العنوان: ${formData.address}, ${formData.city}`;
-
-    const encoded = encodeURIComponent(message);
-    const whatsappLink = `https://wa.me/+201030576522?text=${encoded}`;
-    window.open(whatsappLink, "_blank");
-
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      address: "",
-      city: "",
-    });
-    setErrors({});
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        address: "",
+        city: "",
+      });
+      clearCart();
+      setErrors({});
+      setIsCheckOut(false);
+      router.push("/products");
+    } catch (error) {
+      console.error("حدث خطأ أثناء إرسال الطلب:", error);
+      alert("حدث خطأ أثناء إرسال الطلب.");
+    }
   };
 
   const validateForm = () => {
@@ -513,7 +524,7 @@ export default function CartPage() {
                 <CardFooter>
                   {isCheckOut ? (
                     <Button
-                      onClick={handleSendWhatsApp}
+                      onClick={handleConfirmOrder}
                       className="w-full"
                       size="lg"
                     >
@@ -557,3 +568,50 @@ export default function CartPage() {
     </div>
   );
 }
+
+// const handleSendWhatsApp = () => {
+//   const isValid = validateForm();
+//   if (!isValid) {
+//     return;
+//   }
+//   if (cartItems.length === 0) return;
+
+//   let message = "🧴 طلب جديد من الموقع:\n\n📦 المنتجات:\n";
+
+//   const subtotal = cartItems.reduce(
+//     (sum, item) => sum + item.discountedPrice * item.quantity,
+//     0
+//   );
+//   const shipping = 50.0;
+//   let total = subtotal + shipping;
+//   cartItems.forEach((item, index) => {
+//     const itemTotal = item.discountedPrice * item.quantity;
+
+//     message += `${index + 1}. ${item.name} - السعر: ${
+//       item.discountedPrice
+//     } جنيه × ${item.quantity} = ${itemTotal} جنيه\n`;
+//   });
+
+//   message += `\n💰 مصاريف الشحن: ${shipping} جنيه\n`;
+//   message += `\n💰 الإجمالي الكلي: ${total} جنيه\n`;
+
+//   message += "\n📍 تفاصيل الشحن:\n";
+//   message += `الاسم: ${formData.firstName} ${formData.lastName}\n`;
+//   message += `الإيميل: ${formData.email}\n`;
+//   message += `رقم الهاتف: ${formData.phone}\n`;
+//   message += `العنوان: ${formData.address}, ${formData.city}`;
+
+//   const encoded = encodeURIComponent(message);
+//   const whatsappLink = `https://wa.me/+201030576522?text=${encoded}`;
+//   window.open(whatsappLink, "_blank");
+
+//   setFormData({
+//     firstName: "",
+//     lastName: "",
+//     email: "",
+//     phone: "",
+//     address: "",
+//     city: "",
+//   });
+//   setErrors({});
+// };

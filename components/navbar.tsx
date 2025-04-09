@@ -1,21 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Divide, Menu, ShoppingBag, X } from "lucide-react";
+import { Divide, Menu, ShoppingBag, ShoppingCart, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useTheme } from "next-themes";
+import Cookies from "js-cookie";
+import { Badge } from "@/components/ui/badge";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
   const { theme } = useTheme();
+
+  useEffect(() => {
+    const cartCookie = Cookies.get("cart");
+    const currentCart = cartCookie ? JSON.parse(cartCookie) : [];
+    setCartCount(currentCart.length);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -72,18 +81,50 @@ export default function Navbar() {
           </nav>
         </div>
         <div className="hidden md:flex items-center justify-center ">
-          <Link href="/cart">
-            <ShoppingBag className="h-5 w-5 mr-5" />
-          </Link>
-          <ThemeToggle />
+          {/* <div className="relative">
+            <ShoppingBag className="h-5 w-5" />
+            {cartCount > 0 && (
+              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1 py-0.5">
+                {cartCount}
+              </span>
+            )}
+          </div> */}
+          <Button variant="ghost" size="icon" asChild className="relative">
+            <Link href="/cart">
+              <ShoppingCart className="h-5 w-5" />
+              {cartCount > 0 && (
+                <Badge
+                  variant="destructive"
+                  className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                >
+                  {cartCount}
+                </Badge>
+              )}
+              <span className="sr-only">Cart</span>
+            </Link>
+          </Button>
+          <div className="ml-5">
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
 
         <div className="md:hidden flex items-center justify-center">
-          <Link href="/cart">
-            <ShoppingBag className="h-5 w-5 mr-5" />
-          </Link>
+          <Button variant="ghost" size="icon" asChild className="relative">
+            <Link href="/cart">
+              <ShoppingCart className="h-5 w-5" />
+              {cartCount > 0 && (
+                <Badge
+                  variant="destructive"
+                  className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                >
+                  {cartCount}
+                </Badge>
+              )}
+              <span className="sr-only">Cart</span>
+            </Link>
+          </Button>
           <ThemeToggle />
           <Button
             variant="ghost"

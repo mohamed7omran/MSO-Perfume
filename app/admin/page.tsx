@@ -1,33 +1,39 @@
-import type React from "react"
-import Link from "next/link"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Package } from "lucide-react"
+"use client";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import React, { useEffect, useState } from "react";
 
 export default function AdminDashboardPage() {
-  return (
-    <div className="container py-12">
-      <h1 className="mb-8 text-3xl font-bold">لوحة التحكم</h1>
+  const [ordersCount, setOrdersCount] = useState(0);
+  const [customersCount, setCustomersCount] = useState(0);
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xl font-medium">إدارة المنتجات</CardTitle>
-            <Package className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <CardDescription className="mb-4">إضافة، تعديل، وحذف المنتجات في متجرك</CardDescription>
-            <Button asChild>
-              <Link href="/admin/products">
-                الذهاب إلى المنتجات
-                <ArrowLeft className="mr-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
+  useEffect(() => {
+    const fetchData = async () => {
+      const orderSnapshot = await getDocs(collection(db, "orders"));
+      setOrdersCount(orderSnapshot.size);
+
+      const customerSnapshot = await getDocs(collection(db, "customers"));
+      setCustomersCount(customerSnapshot.size);
+    };
+
+    fetchData();
+  }, []);
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">📊 لوحة التحكم</h1>
+
+      <div className="grid grid-cols-2 gap-6">
+        <div className="bg-blue-500 text-white p-6 rounded shadow">
+          <h2 className="text-xl">عدد الطلبات</h2>
+          <p className="text-2xl font-bold">{ordersCount}</p>
+        </div>
+        <div className="bg-purple-500 text-white p-6 rounded shadow">
+          <h2 className="text-xl">عدد العملاء</h2>
+          <p className="text-2xl font-bold">{customersCount}</p>
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
 function ArrowLeft(props: React.SVGProps<SVGSVGElement>) {
@@ -47,6 +53,5 @@ function ArrowLeft(props: React.SVGProps<SVGSVGElement>) {
       <path d="m12 19-7-7 7-7" />
       <path d="M19 12H5" />
     </svg>
-  )
+  );
 }
-

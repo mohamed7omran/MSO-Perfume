@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/select";
 import Cookies from "js-cookie";
 import { useSearchParams } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -23,7 +25,7 @@ export default function ProductsPage() {
   const [error, setError] = useState<string | null>(null);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const searchParams = useSearchParams();
-
+  const { toast } = useToast();
   const [filter, setFilter] = useState({
     price: "",
     brand: "",
@@ -44,6 +46,15 @@ export default function ProductsPage() {
     if (!currentCart.includes(id)) {
       const updatedCart = [...currentCart, id];
       Cookies.set("cart", JSON.stringify(updatedCart), { expires: 7 });
+      toast({
+        title: "✅Added to cart",
+        description: `The product has been added to your cart.`,
+      });
+    } else {
+      toast({
+        title: "The product is already in your shopping cart.",
+        description: `The product has already been added to your shopping cart.`,
+      });
     }
   };
 
